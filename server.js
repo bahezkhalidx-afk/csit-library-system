@@ -65,8 +65,11 @@ app.get('/api/books', (req, res) => {
 // Add Book / Lecture Note API
 app.post('/api/books', upload.fields([{ name: 'bookFile', maxCount: 1 }, { name: 'coverImage', maxCount: 1 }]), (req, res) => {
   const { title, author, category, uploader } = req.body;
-  const bookFile = req.files['bookFile'] ? `http://localhost:${PORT}/uploads/${req.files['bookFile'][0].filename}` : '';
-const coverUrl = req.files['coverImage'] ? `http://localhost:${PORT}/uploads/${req.files['coverImage'][0].filename}` : '';
+  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  
+  const bookFile = req.files['bookFile'] ? `${baseUrl}/uploads/${req.files['bookFile'][0].filename}` : '';
+  const coverUrl = req.files['coverImage'] ? `${baseUrl}/uploads/${req.files['coverImage'][0].filename}` : '';
+  
   const newBook = {
     id: Date.now(),
     title,
@@ -93,7 +96,8 @@ app.post('/api/profile', upload.single('profilePic'), (req, res) => {
   const { username } = req.body;
   const user = users.find(u => u.username === username);
   if (user && req.file) {
-    user.profilePic = `http://localhost:${PORT}/uploads/${req.file.filename}`;
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    user.profilePic = `${baseUrl}/uploads/${req.file.filename}`;
     return res.json({ success: true, profilePic: user.profilePic });
   }
   res.status(400).json({ success: false, message: 'هەڵە ڕویدا!' });
