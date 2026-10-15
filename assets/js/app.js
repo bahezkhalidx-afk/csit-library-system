@@ -144,7 +144,7 @@ async function addBook(e) {
     const bookFile = document.getElementById('bookFile').files[0];
     if (bookFile) formData.append('bookFile', bookFile);
 
-    const res = await fetch('http://localhost:5000/api/books', { method: 'POST', body: formData });
+    const res = await fetch('https://csit-library-system-production.up.railway.app/api/books', { method: 'POST', body: formData });
     if (res.ok) {
         alert('بە سەرکەوتوویی زیادکرا!');
         document.getElementById('bookForm').reset();
@@ -153,7 +153,7 @@ async function addBook(e) {
 }
 
 async function deleteBook(id) {
-    await fetch(`http://localhost:5000/api/books/${id}`, { method: 'DELETE' });
+    await fetch(`https://csit-library-system-production.up.railway.app/api/books/${id}`, { method: 'DELETE' });
     fetchBooks();
 }
 
