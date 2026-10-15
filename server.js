@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -66,8 +66,7 @@ app.get('/api/books', (req, res) => {
 app.post('/api/books', upload.fields([{ name: 'bookFile', maxCount: 1 }, { name: 'coverImage', maxCount: 1 }]), (req, res) => {
   const { title, author, category, uploader } = req.body;
   const bookFile = req.files['bookFile'] ? `http://localhost:${PORT}/uploads/${req.files['bookFile'][0].filename}` : '';
-  const coverUrl = req.files['coverImage'] ? `http://localhost:${PORT}/uploads/${req.files['coverImage'][0].filename}` : '';
-  
+const coverUrl = req.files['coverImage'] ? `http://localhost:${PORT}/uploads/${req.files['coverImage'][0].filename}` : '';
   const newBook = {
     id: Date.now(),
     title,
