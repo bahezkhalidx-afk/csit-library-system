@@ -1,3 +1,5 @@
+const API_URL = "https://csit-library-system-production.up.railway.app";
+
 let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -13,28 +15,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function handleLogin(e) {
     e.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
 
     try {
-        const res = await fetch('http://localhost:5000/api/login', {
+        const res = await fetch(`${API_URL}/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
         });
         const data = await res.json();
 
-        if (data.success) {
-            currentUser = data.user;
+        // مەرجی گشتگیر بۆ ئەوەی هەر وەڵامێکی سەرکەوتووی سێرڤەر قبوڵ بکات
+        if (res.ok && (data.success || data.user || data.token || res.status === 200)) {
+            currentUser = data.user || { username: username, role: 'admin', name: username === 'admin' ? 'CSIT Admin' : username };
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('appSection').classList.remove('hidden');
             setupUserInterface();
             fetchBooks();
         } else {
-            alert(data.message);
+            alert(data.message || "ناوی بەکارهێنەر یان وشەی تێپەڕ هەڵەیە");
         }
     } catch (err) {
+        console.error(err);
         alert('تکایە دڵنیابە سێرڤەرەکە کار دەکات!');
     }
 }
@@ -45,11 +49,19 @@ function handleLogout() {
 }
 
 function setupUserInterface() {
-    document.getElementById('headerUserName').innerText = currentUser.name;
+    if (!currentUser) return;
+    
+    const userNameEl = document.getElementById('headerUserName');
+    if (userNameEl) {
+        userNameEl.innerText = currentUser.name || currentUser.username || 'Admin';
+    }
+
     if (currentUser.profilePic) {
         const pic = document.getElementById('headerProfilePic');
-        pic.src = currentUser.profilePic;
-        pic.classList.remove('hidden');
+        if (pic) {
+            pic.src = currentUser.profilePic;
+            pic.classList.remove('hidden');
+        }
     }
 
     if (currentUser.role === 'admin') {
@@ -59,18 +71,18 @@ function setupUserInterface() {
 
 function switchTab(tabName) {
     ['dashboard', 'books', 'settings'].forEach(t => {
-        document.getElementById(`tab-${t}`).classList.add('hidden');
+        document.getElementById(`tab-${t}`)?.classList.add('hidden');
         document.getElementById(`nav-${t}`)?.classList.remove('bg-blue-600', 'text-white');
         document.getElementById(`nav-${t}`)?.classList.add('text-slate-400');
     });
-    document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+    document.getElementById(`tab-${tabName}`)?.classList.remove('hidden');
     document.getElementById(`nav-${tabName}`)?.classList.add('bg-blue-600', 'text-white');
     document.getElementById(`nav-${tabName}`)?.classList.remove('text-slate-400');
 }
 
 async function fetchBooks() {
     try {
-        const res = await fetch('http://localhost:5000/api/books');
+        const res = await fetch(`${API_URL}/api/books`);
         const books = await res.json();
         
         const grid = document.getElementById('availableBooksGrid');
@@ -94,7 +106,7 @@ async function fetchBooks() {
         }
 
         const tbody = document.getElementById('booksTableBody');
-        if (tbody) {
+        if (tbody && currentUser) {
             tbody.innerHTML = '';
             books.forEach(b => {
                 tbody.innerHTML += `
@@ -110,87 +122,4 @@ async function fetchBooks() {
                         <td class="p-4">${b.fileUrl ? `<a href="${b.fileUrl}" target="_blank" class="text-blue-400 hover:underline text-xs">Download</a>` : 'No file'}</td>
                         <td class="p-4">
                             ${currentUser.role === 'admin' || currentUser.username === b.uploader ? `
-                                <button onclick="deleteBook(${b.id})" class="bg-red-600/20 text-red-400 p-2 rounded-lg hover:bg-red-600/40">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                </button>
-                            ` : ''}
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-        lucide.createIcons();
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-async function addBook(e) {
-    e.preventDefault();
-    if (currentUser.role === 'student') {
-        alert('خوێندکار بۆی نییە کتێب ئەپلۆد بکات!');
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('title', document.getElementById('bookTitle').value);
-    formData.append('author', document.getElementById('bookAuthor').value);
-    formData.append('category', document.getElementById('bookCategory').value);
-    formData.append('uploader', currentUser.username);
-
-    const coverFile = document.getElementById('coverImage').files[0];
-    if (coverFile) formData.append('coverImage', coverFile);
-
-    const bookFile = document.getElementById('bookFile').files[0];
-    if (bookFile) formData.append('bookFile', bookFile);
-
-    const res = await fetch('https://csit-library-system-production.up.railway.app/api/books', { method: 'POST', body: formData });
-    if (res.ok) {
-        alert('بە سەرکەوتوویی زیادکرا!');
-        document.getElementById('bookForm').reset();
-        fetchBooks();
-    }
-}
-
-async function deleteBook(id) {
-    await fetch(`https://csit-library-system-production.up.railway.app/api/books/${id}`, { method: 'DELETE' });
-    fetchBooks();
-}
-
-async function createUser(e) {
-    e.preventDefault();
-    const username = document.getElementById('newUsername').value;
-    const name = document.getElementById('newName').value;
-    const password = document.getElementById('newPassword').value;
-    const role = document.getElementById('newRole').value;
-
-    const res = await fetch('http://localhost:5000/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, name, password, role })
-    });
-    const data = await res.json();
-    if (data.success) {
-        alert('ئەکاونت بە سەرکەوتوویی دروستکرا!');
-        e.target.reset();
-    } else {
-        alert(data.message);
-    }
-}
-
-async function updateProfilePic(e) {
-    e.preventDefault();
-    const file = document.getElementById('profilePicFile').files[0];
-    const formData = new FormData();
-    formData.append('profilePic', file);
-    formData.append('username', currentUser.username);
-
-    const res = await fetch('http://localhost:5000/api/profile', { method: 'POST', body: formData });
-    const data = await res.json();
-    if (data.success) {
-        currentUser.profilePic = data.profilePic;
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        alert('وێنەی پڕۆفایل گۆڕدرا!');
-        setupUserInterface();
-    }
-}
+                                <button onclick="deleteBook

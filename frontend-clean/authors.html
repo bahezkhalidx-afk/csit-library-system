@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ku" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Data - CSIT Library System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-[#0b0f19] text-white min-h-screen font-sans">
+
+    <div class="min-h-screen flex">
+        <aside class="w-64 bg-[#111827] border-r border-slate-800 flex flex-col justify-between p-4">
+            <div>
+                <div class="flex items-center gap-3 px-2 py-3 mb-6 border-b border-slate-800">
+                    <div class="bg-blue-600 p-2 rounded-lg text-white font-bold text-xs">UOK</div>
+                    <div>
+                        <h1 class="font-bold text-xs leading-tight">University of Kirkuk</h1>
+                        <p class="text-[10px] text-slate-400">CSIT Library</p>
+                    </div>
+                </div>
+
+                <nav class="space-y-1">
+                    <a href="index.html" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+                    </a>
+                    <a href="books.html" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800">
+                        <i data-lucide="book-open" class="w-4 h-4"></i> Manage Books
+                    </a>
+                    <a href="authors.html" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-blue-600 text-white">
+                        <i data-lucide="users" class="w-4 h-4"></i> Master Data
+                    </a>
+                </nav>
+            </div>
+
+            <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 bg-red-900/40 hover:bg-red-800 text-red-300 py-2.5 rounded-lg transition duration-200 text-sm font-medium">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+            </button>
+        </aside>
+
+        <main class="flex-1 flex flex-col">
+            <header class="h-16 border-b border-slate-800 flex items-center justify-between px-6 bg-[#111827]">
+                <h2 class="text-lg font-semibold">Author List</h2>
+            </header>
+
+            <div class="p-6 flex-1 overflow-y-auto">
+                <div class="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900 text-slate-400 uppercase text-xs">
+                            <tr>
+                                <th class="p-4">Name</th>
+                                <th class="p-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="authorsTableBody">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
