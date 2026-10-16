@@ -110,7 +110,8 @@ const translations = {
 
 document.addEventListener("DOMContentLoaded", () => {
     setLanguage(currentLang);
-    document.getElementById('langSelect').value = currentLang;
+    const langSelect = document.getElementById('langSelect');
+    if (langSelect) langSelect.value = currentLang;
 
     if (currentUser) {
         document.getElementById('loginSection')?.classList.add('hidden');
@@ -152,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         fetchManageBooks();
                     }
                 } else {
-                    alert("ناوی بەکارهێنەر یان وشەی تێپەڕ هەڵەیە");
+                    alert(data.message || "ناوی بەکارهێنەر یان وشەی تێپەڕ هەڵەیە");
                 }
             } catch (err) {
                 console.error(err);
@@ -168,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const formData = new FormData();
             formData.append('title', document.getElementById('bookTitle').value.trim());
             formData.append('author', document.getElementById('bookAuthor').value.trim());
-            formData.append('resourceType', document.getElementById('resourceType').value);
+            formData.append('resourceType', document.getElementById('resourceType').value || 'book');
             formData.append('partName', document.getElementById('bookPartName').value.trim() || 'General');
             formData.append('category', document.getElementById('bookCategory').value.trim());
             
@@ -183,9 +184,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (res.ok) {
                     alert('بە سەرکەوتوویی ئەپلۆد کرا!');
                     bookForm.reset();
-                    fetchBooks();
-                    fetchManageBooks();
+                    await fetchBooks();
+                    await fetchManageBooks();
                     switchTab('home');
+                } else {
+                    alert('هەڵەیەک لە ئەپلۆدکردن ڕوویدا');
+                }
+            } catch (err) { console.error(err); }
+        });
+    }
+
+    const userForm = document.getElementById('userForm');
+    if (userForm) {
+        userForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('newUsername').value.trim();
+            const password = document.getElementById('newPassword').value.trim();
+            const role = document.getElementById('newRole').value;
+
+            try {
+                const res = await fetch(`${API_URL}/api/users`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, role })
+                });
+                if (res.ok) {
+                    alert('بەکارهێنەر دروستکرا!');
+                    userForm.reset();
+                    fetchUsers();
+                } else {
+                    alert('نەتوانرا بەکارهێنەر دروست بکرێت');
                 }
             } catch (err) { console.error(err); }
         });
@@ -222,10 +250,12 @@ function toggleTheme() {
     const root = document.documentElement;
     root.classList.toggle('dark');
     const icon = document.getElementById('themeIcon');
-    if (root.classList.contains('dark')) {
-        icon.setAttribute('data-lucide', 'sun');
-    } else {
-        icon.setAttribute('data-lucide', 'moon');
+    if (icon) {
+        if (root.classList.contains('dark')) {
+            icon.setAttribute('data-lucide', 'sun');
+        } else {
+            icon.setAttribute('data-lucide', 'moon');
+        }
     }
     lucide.createIcons();
 }
@@ -398,7 +428,6 @@ function openBookDetails(bookTitle) {
     const existingBorrow = borrowedList.find(item => item.bookId === bookId);
 
     if (isMalzam) {
-        // مەلزەمە بێ کات و خۆڕاییە
         matchedBooks.forEach((part, index) => {
             const partLabel = part.partName && part.partName !== 'General' ? part.partName : `بەشی ${index + 1}`;
             partsGrid.innerHTML += `
@@ -410,7 +439,6 @@ function openBookDetails(bookTitle) {
             `;
         });
     } else {
-        // کتێب پێویستی بە قەرزکردنە
         if (!existingBorrow) {
             partsGrid.innerHTML = `
                 <div class="col-span-full bg-[#111827] border border-slate-800 p-6 rounded-3xl text-center space-y-4">
@@ -453,7 +481,6 @@ function openBookDetails(bookTitle) {
 
 function borrowBook(bookId, title) {
     let borrowedList = JSON.parse(localStorage.getItem('borrowedBooks')) || [];
-    // ماوەی ٧ ڕۆژ
     const expiryTime = new Date().getTime() + (7 * 24 * 60 * 60 * 1000);
     borrowedList.push({ bookId, title, expiryTime });
     localStorage.setItem('borrowedBooks', JSON.stringify(borrowedList));
@@ -565,12 +592,40 @@ async function fetchManageBooks() {
     } catch (err) { console.error(err); }
 }
 
+async function fetchUsers() {
+    try {
+        const res = await fetch(`${API_URL}/api/users`);
+        const users = await res.json();
+        const list = document.getElementById('usersList');
+        if (list) {
+            list.innerHTML = '';
+            users.forEach(u => {
+                const uid = u._id || u.username;
+                list.innerHTML += `
+                    <div class="bg-[#111827] p-3 rounded-2xl border border-slate-800 flex justify-between items-center text-sm">
+                        <span>${u.username} (${u.role})</span>
+                        <button onclick="deleteUser('${uid}')" class="text-red-400 text-xs bg-red-950/40 px-3 py-1 rounded-lg">سڕینەوە</button>
+                    </div>
+                `;
+            });
+        }
+    } catch (err) { console.error(err); }
+}
+
 async function deleteBook(id) {
     if (!confirm('دڵنیایت؟')) return;
     try {
         await fetch(`${API_URL}/api/books/${id}`, { method: 'DELETE' });
         fetchBooks();
         fetchManageBooks();
+    } catch (err) { console.error(err); }
+}
+
+async function deleteUser(id) {
+    if (!confirm('دڵنیایت؟')) return;
+    try {
+        await fetch(`${API_URL}/api/users/${id}`, { method: 'DELETE' });
+        fetchUsers();
     } catch (err) { console.error(err); }
 }
 
