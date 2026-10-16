@@ -1,56 +1,65 @@
 <!DOCTYPE html>
-<html lang="ku" dir="ltr">
+<html lang="ku" dir="rtl" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>University of Kirkuk - CSIT Library System</title>
+    <title>CSIT Library Management System - University of Kirkuk</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
 </head>
-<body class="bg-[#0b0f19] text-slate-100 min-h-screen font-sans">
+<body class="bg-[#0b0f19] dark:bg-[#0b0f19] text-slate-100 dark:text-slate-100 min-h-screen font-sans overflow-x-hidden transition-colors duration-300">
 
     <!-- Login View -->
-    <div id="loginSection" class="min-h-screen flex items-center justify-center p-4">
-        <div class="bg-[#111827] p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-800">
+    <div id="loginSection" class="min-h-screen flex items-center justify-center p-4 bg-slate-950">
+        <div class="bg-[#111827] p-6 sm:p-8 rounded-3xl shadow-2xl w-full max-w-md border border-slate-800 backdrop-blur-xl">
             <div class="flex justify-center mb-4">
-                <div class="w-12 h-12 bg-gradient-to-tr from-amber-500 to-amber-200 rounded-xl flex items-center justify-center font-bold text-slate-950 shadow-lg">
-                    UOK
-                </div>
+                <img src="logo.png" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=CSIT+UOK&background=f59e0b&color=0f172a&bold=true';" class="w-16 h-16 object-contain rounded-2xl shadow-lg" alt="CSIT Logo">
             </div>
-            <h2 class="text-xl font-bold text-center text-white mb-1">University of Kirkuk</h2>
-            <p class="text-xs text-center text-slate-400 mb-6">CSIT Library Management System</p>
+            <h2 class="text-xl font-bold text-center text-white mb-1">زانکۆی کەرکووک - کۆلێژی CSIT</h2>
+            <p class="text-xs text-center text-amber-400 font-semibold mb-6">سیستەمی بەڕێوەبردنی کتێبخانە</p>
             
             <form id="loginForm" class="space-y-4">
                 <div>
-                    <label class="block text-slate-300 text-xs font-medium mb-1">Username</label>
-                    <input type="text" id="username" placeholder="admin یاخود ناوی خوێندکار" class="w-full bg-[#1f2937] text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-blue-500 text-sm" required>
+                    <label class="block text-slate-300 text-xs font-medium mb-1" data-i18n="username">ناوی بەکارهێنەر</label>
+                    <input type="text" id="username" placeholder="admin یاخود ناوی خوێندکار" class="w-full bg-[#1f2937] text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-purple-500 text-sm" required>
                 </div>
                 <div>
-                    <label class="block text-slate-300 text-xs font-medium mb-1">Password</label>
-                    <input type="password" id="password" placeholder="••••••••" class="w-full bg-[#1f2937] text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-blue-500 text-sm" required>
+                    <label class="block text-slate-300 text-xs font-medium mb-1" data-i18n="password">وشەی تێپەڕ</label>
+                    <input type="password" id="password" placeholder="••••••••" class="w-full bg-[#1f2937] text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-purple-500 text-sm" required>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition duration-200 text-sm shadow-lg shadow-blue-600/20">
-                    Log In
+                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-2.5 rounded-xl transition duration-200 text-sm shadow-lg shadow-purple-600/30" data-i18n="loginBtn">
+                    چوونەژوورەوە
                 </button>
             </form>
         </div>
     </div>
 
     <!-- Main App Dashboard -->
-    <div id="appSection" class="hidden min-h-screen flex">
+    <div id="appSection" class="hidden min-h-screen flex flex-col md:flex-row relative">
         
-        <!-- Sidebar -->
-        <aside class="w-64 bg-[#111827] border-r border-slate-800 flex flex-col justify-between p-4 shrink-0 select-none">
+        <!-- Mobile Backdrop Overlay -->
+        <div id="sidebarOverlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-black/70 z-30 hidden md:hidden backdrop-blur-sm"></div>
+
+        <!-- Modern Glassmorphism Sidebar (Matching UI Reference) -->
+        <aside id="mainSidebar" class="fixed md:static inset-y-0 right-0 z-40 w-64 bg-[#111827]/90 md:bg-[#111827] border-l md:border-l-0 md:border-r border-slate-800/80 flex flex-col justify-between p-4 shrink-0 select-none transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out backdrop-blur-xl">
             <div>
-                <!-- College Brand -->
-                <div class="flex items-center gap-3 px-2 py-3 mb-8 border-b border-slate-800/80">
-                    <div class="w-10 h-10 bg-gradient-to-tr from-amber-500 to-amber-200 rounded-xl flex items-center justify-center font-bold text-slate-950 shrink-0 shadow-lg">
-                        UOK
+                <!-- Brand Header -->
+                <div class="flex items-center justify-between px-2 py-3 mb-6 border-b border-slate-800/80">
+                    <div class="flex items-center gap-3">
+                        <img src="logo.png" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=CSIT+UOK&background=f59e0b&color=0f172a&bold=true';" class="w-9 h-9 object-contain rounded-xl shadow-md" alt="Logo">
+                        <div>
+                            <h1 class="font-bold text-xs leading-tight text-white">Kirkuk University</h1>
+                            <p class="text-[10px] text-amber-400 font-semibold">CSIT Library</p>
+                        </div>
                     </div>
-                    <div>
-                        <h1 class="font-bold text-xs leading-tight text-white">Kirkuk University</h1>
-                        <p class="text-[10px] text-amber-400 font-semibold">CSIT Library System</p>
-                    </div>
+                    <button onclick="toggleMobileSidebar()" class="md:hidden text-slate-400 hover:text-white p-1">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
                 </div>
 
                 <!-- Dynamic Navigation Links -->
@@ -58,117 +67,193 @@
             </div>
 
             <!-- Logout Button -->
-            <button onclick="handleLogout()" class="flex items-center justify-center gap-2 bg-red-950/40 hover:bg-red-900/60 border border-red-900/50 text-red-300 py-2.5 rounded-xl transition duration-200 text-sm font-medium">
-                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+            <button onclick="handleLogout()" class="flex items-center justify-center gap-2 bg-red-950/40 hover:bg-red-900/60 border border-red-900/50 text-red-300 py-2.5 rounded-xl transition duration-200 text-sm font-medium w-full mt-4">
+                <i data-lucide="log-out" class="w-4 h-4"></i> <span data-i18n="logout">چوونە دەرەوە</span>
             </button>
         </aside>
 
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col min-w-0 bg-[#0b0f19]">
+        <div class="flex-1 flex flex-col min-w-0 bg-[#0b0f19] w-full">
             
-            <!-- Header -->
-            <header class="h-16 border-b border-slate-800/80 flex items-center justify-between px-6 bg-[#111827]/60 backdrop-blur-md sticky top-0 z-20">
+            <!-- Header (Without Breadcrumb, Lang & Theme switch next to profile) -->
+            <header class="h-16 border-b border-slate-800/80 flex items-center justify-between px-4 sm:px-6 bg-[#111827]/60 backdrop-blur-md sticky top-0 z-20">
                 <div class="flex items-center gap-3">
-                    <span id="breadcrumbText" class="text-xs sm:text-sm text-slate-300 font-medium">Library System >> HOME</span>
+                    <button onclick="toggleMobileSidebar()" class="md:hidden text-slate-300 hover:text-white p-1.5 bg-[#1f2937] rounded-lg border border-slate-700">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2 bg-[#1f2937] px-3 py-1.5 rounded-full border border-slate-700">
-                        <img id="headerProfilePic" src="" class="w-6 h-6 rounded-full bg-blue-600 object-cover hidden" alt="Profile">
-                        <div id="headerProfileFallback" class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white">A</div>
+                    <!-- Language Switcher -->
+                    <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-[#1f2937] text-slate-200 text-xs px-2.5 py-1.5 rounded-xl border border-slate-700 focus:outline-none">
+                        <option value="ku">کوردی</option>
+                        <option value="ar">العربية</option>
+                        <option value="en">English</option>
+                    </select>
+
+                    <!-- Dark/Light Mode Toggle -->
+                    <button onclick="toggleTheme()" class="bg-[#1f2937] text-amber-400 p-2 rounded-xl border border-slate-700 hover:bg-slate-800 transition">
+                        <i data-lucide="sun" id="themeIcon" class="w-4 h-4"></i>
+                    </button>
+
+                    <!-- Profile Info -->
+                    <div class="flex items-center gap-2 bg-[#1f2937] px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full border border-slate-700">
+                        <img id="headerProfilePic" src="" class="w-6 h-6 rounded-full bg-purple-600 object-cover hidden" alt="Profile">
+                        <div id="headerProfileFallback" class="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-xs font-bold text-white">A</div>
                         <span id="headerUserName" class="text-xs font-medium text-slate-200">Admin</span>
                     </div>
                 </div>
             </header>
 
             <!-- Main Views Container -->
-            <main class="p-6 flex-1 overflow-y-auto space-y-6">
+            <main class="p-4 sm:p-6 flex-1 overflow-y-auto space-y-6">
                 
                 <!-- Home View -->
                 <div id="tab-home" class="space-y-6">
-                    <div class="text-center py-6 space-y-2">
-                        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Welcome to <span class="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Library Management System</span></h2>
-                        <p class="text-slate-400 text-xs sm:text-sm max-w-xl mx-auto">Simplify your library operations with an intuitive dashboard to manage books and explore resources.</p>
+                    <div class="text-center py-4 sm:py-6 space-y-2">
+                        <h2 class="text-xl sm:text-3xl font-bold tracking-tight text-white" data-i18n="welcomeTitle">بەخێر هاتن بۆ سیستەمی کتێبخانەی CSIT</h2>
+                        <p class="text-slate-400 text-xs sm:text-sm max-w-xl mx-auto px-2" data-i18n="welcomeSub">زانکۆی کەرکووک - کۆلێژی زانستی کۆمپیوتەر و تەکنەلۆجیای زانیاری</p>
                     </div>
 
-                    <div id="booksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+                    <div id="booksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"></div>
                 </div>
 
                 <!-- Upload View (Admin) -->
                 <div id="tab-upload" class="hidden space-y-6 max-w-2xl mx-auto">
-                    <h3 class="text-xl font-bold text-white">Upload Book / PDF Note</h3>
-                    <form id="bookForm" class="bg-[#111827] p-6 rounded-2xl border border-slate-800 space-y-4">
+                    <h3 class="text-lg sm:text-xl font-bold text-white" data-i18n="uploadTitle">ئەپلۆدکردنی کتێب یان مەلزەمە</h3>
+                    <form id="bookForm" class="bg-[#111827] p-4 sm:p-6 rounded-3xl border border-slate-800 space-y-4">
                         <div>
-                            <label class="block text-xs text-slate-400 mb-1">Book Title</label>
-                            <input type="text" id="bookTitle" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500" required>
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">Author / Teacher Name</label>
-                            <input type="text" id="bookAuthor" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500" required>
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-400 mb-1">Category / Section</label>
-                            <input type="text" id="bookCategory" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500" required>
+                            <label class="block text-xs text-slate-400 mb-1" data-i18n="bookTitleLbl">ناوی کتێب / مەلزەمە</label>
+                            <input type="text" id="bookTitle" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500" required>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs text-slate-400 mb-1">Book File (PDF)</label>
-                                <input type="file" id="bookFile" accept=".pdf" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white">
+                                <label class="block text-xs text-slate-400 mb-1" data-i18n="authorLbl">مامۆستا / دانەر</label>
+                                <input type="text" id="bookAuthor" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500" required>
                             </div>
                             <div>
-                                <label class="block text-xs text-slate-400 mb-1">Cover Image</label>
+                                <label class="block text-xs text-slate-400 mb-1" data-i18n="typeLbl">جۆر (کتێب قەرزکردن / مەلزەمە بێ کات)</label>
+                                <select id="resourceType" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500">
+                                    <option value="book">کتێب (قەرزکردنی کاتی)</option>
+                                    <option value="malzam">مەلزەمە (بێ کات - فري)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1" data-i18n="partNameLbl">ناوی بەش (نموونە: Part 1)</label>
+                                <input type="text" id="bookPartName" placeholder="Part 1" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1" data-i18n="catLbl">قۆناغ / بەش</label>
+                                <input type="text" id="bookCategory" placeholder="Stage 4" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500" required>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1" data-i18n="pdfLbl">فایلی PDF</label>
+                                <input type="file" id="bookFile" accept=".pdf" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1" data-i18n="coverLbl">وێنەی بەرگ</label>
                                 <input type="file" id="coverImage" accept="image/*" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-700 file:text-white">
                             </div>
                         </div>
-                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/20">Upload Book</button>
+                        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-xl transition text-sm shadow-lg shadow-purple-600/30" data-i18n="uploadBtn">ئەپلۆدکردن</button>
                     </form>
                 </div>
 
                 <!-- Manage Books View (Admin) -->
                 <div id="tab-manage-books" class="hidden space-y-6">
-                    <h3 class="text-xl font-bold text-white">Manage Books (Edit / Delete)</h3>
+                    <h3 class="text-lg sm:text-xl font-bold text-white" data-i18n="manageTitle">بەڕێوەبردنی کتێبەکان</h3>
                     <div id="manageBooksList" class="space-y-3"></div>
                 </div>
 
                 <!-- Users View (Admin) -->
                 <div id="tab-users" class="hidden space-y-6">
-                    <h3 class="text-xl font-bold text-white">User Management</h3>
-                    <form id="userForm" class="bg-[#111827] p-4 rounded-2xl border border-slate-800 flex gap-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-white" data-i18n="userMgmtTitle">بەڕێوەبردنی بەکارهێنەران</h3>
+                    <form id="userForm" class="bg-[#111827] p-4 rounded-3xl border border-slate-800 flex flex-col sm:flex-row gap-3">
                         <input type="text" id="newUsername" placeholder="Username" class="flex-1 bg-[#1f2937] border border-slate-700 p-2 rounded-xl text-sm text-white" required>
                         <input type="password" id="newPassword" placeholder="Password" class="flex-1 bg-[#1f2937] border border-slate-700 p-2 rounded-xl text-sm text-white" required>
                         <select id="newRole" class="bg-[#1f2937] border border-slate-700 p-2 rounded-xl text-sm text-white">
                             <option value="student">Student</option>
                             <option value="admin">Admin</option>
                         </select>
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-semibold">Create User</button>
+                        <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl text-sm font-semibold">دروستکردن</button>
                     </form>
                     <div id="usersList" class="space-y-2"></div>
                 </div>
 
                 <!-- Favorite View (Student) -->
                 <div id="tab-favorite" class="hidden space-y-6">
-                    <h3 class="text-xl font-bold text-white">Favorite Books</h3>
-                    <div id="favoriteBooksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+                    <h3 class="text-lg sm:text-xl font-bold text-white" data-i18n="favTitle">کتێبە دڵخوازەکان</h3>
+                    <div id="favoriteBooksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"></div>
+                </div>
+
+                <!-- Borrowed Books View (Student) -->
+                <div id="tab-borrowed" class="hidden space-y-6">
+                    <h3 class="text-lg sm:text-xl font-bold text-white" data-i18n="borrowedTitle">کتێبە قەرزکراوەکانی من (ماوەبەسەرچوون)</h3>
+                    <div id="borrowedBooksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"></div>
                 </div>
 
                 <!-- Settings View -->
                 <div id="tab-setting" class="hidden space-y-6">
-                    <h3 class="text-xl font-bold text-white">Settings & Profile</h3>
-                    <div class="bg-[#111827] p-6 rounded-2xl border border-slate-800 max-w-md space-y-4">
-                        <p class="text-sm text-slate-300">Update Profile Picture</p>
+                    <h3 class="text-lg sm:text-xl font-bold text-white" data-i18n="settingsTitle">ڕێکخستنەکان و پڕۆفایل</h3>
+                    <div class="bg-[#111827] p-6 rounded-3xl border border-slate-800 max-w-md space-y-4">
+                        <p class="text-sm text-slate-300" data-i18n="updatePic">گۆڕینی وێنەی پڕۆفایل</p>
                         <form id="profileForm" class="space-y-3">
                             <input type="file" id="profilePicFile" accept="image/*" class="w-full text-xs text-slate-400" required>
-                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 py-2 rounded-xl font-semibold">Update Picture</button>
+                            <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white text-xs px-4 py-2 rounded-xl font-semibold" data-i18n="updateBtn">نوێکردنەوەی وێنە</button>
                         </form>
                     </div>
                 </div>
 
-                <!-- Book Details & Parts View (بەشەکانی کتێب بێ نوسینی ئەڵقە) -->
+                <!-- Book Details & Parts View -->
                 <div id="tab-book-detail" class="hidden space-y-6">
                     <button onclick="switchTab('home')" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-4 py-2 rounded-xl font-medium transition flex items-center gap-2">
-                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Home
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-i18n="backHome">گەڕانەوە بۆ سەرەکی</span>
                     </button>
                     <div class="flex flex-col items-center justify-center space-y-4 py-4">
-                        <div id="detailBookCover" class="w-48 h-64 bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-700 flex items-center justify-center"></div>
-                        <h2 id="detailBookTitle" class="text-xl font-bold text-white text-center"></h2>
-                        <p id="detailBook
+                        <div id="detailBookCover" class="w-40 sm:w-48 h-56 sm:h-64 bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-700 flex items-center justify-center"></div>
+                        <h2 id="detailBookTitle" class="text-lg sm:text-xl font-bold text-white text-center"></h2>
+                        <p id="detailBookAuthor" class="text-xs sm:text-sm text-slate-400 text-center"></p>
+                    </div>
+                    <div class="space-y-3">
+                        <h4 class="font-bold text-white text-sm" data-i18n="partsList">بەشە بەردەستەکانی ئەم کتێبە</h4>
+                        <div id="bookPartsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Edit Book Modal -->
+    <div id="editModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-[#111827] border border-slate-800 p-6 rounded-3xl w-full max-w-md space-y-4 shadow-2xl">
+            <h3 class="text-lg font-bold text-white">دەستکاری کتێب</h3>
+            <form id="editBookForm" class="space-y-3">
+                <input type="hidden" id="editBookId">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Title</label>
+                    <input type="text" id="editTitle" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white" required>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Author</label>
+                    <input type="text" id="editAuthor" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white" required>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Category</label>
+                    <input type="text" id="editCategory" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white" required>
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button type="submit" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-xl text-sm font-semibold">پاشەکەوتکردن</button>
+                    <button type="button" onclick="closeEditModal()" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-sm font-semibold">پاشگەزبوونەوە</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
