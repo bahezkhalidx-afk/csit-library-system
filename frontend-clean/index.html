@@ -7,29 +7,29 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-[#0b0f19] text-white min-h-screen font-sans">
+<body class="bg-[#0b0f19] text-slate-100 min-h-screen font-sans">
 
     <!-- Login View -->
     <div id="loginSection" class="min-h-screen flex items-center justify-center p-4">
-        <div class="bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-700">
+        <div class="bg-[#111827] p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-800">
             <div class="flex justify-center mb-4">
-                <div class="bg-blue-600 p-3 rounded-xl text-white">
-                    <i data-lucide="book" class="w-8 h-8"></i>
+                <div class="w-12 h-12 bg-gradient-to-tr from-amber-500 to-amber-200 rounded-xl flex items-center justify-center font-bold text-slate-950 shadow-lg">
+                    UOK
                 </div>
             </div>
-            <h2 class="text-xl sm:text-2xl font-bold text-center text-white mb-1">University of Kirkuk</h2>
-            <p class="text-xs sm:text-sm text-center text-slate-400 mb-6">CSIT Library Management System</p>
+            <h2 class="text-xl font-bold text-center text-white mb-1">University of Kirkuk</h2>
+            <p class="text-xs text-center text-slate-400 mb-6">CSIT Library Management System</p>
             
-            <form onsubmit="handleLogin(event)" class="space-y-4">
+            <form id="loginForm" class="space-y-4">
                 <div>
-                    <label class="block text-slate-300 text-sm font-medium mb-1">Username</label>
-                    <input type="text" id="username" placeholder="Enter username" class="w-full bg-slate-700 text-white px-4 py-2.5 rounded-lg border border-slate-600 focus:outline-none focus:border-blue-500 text-sm" required>
+                    <label class="block text-slate-300 text-xs font-medium mb-1">Username</label>
+                    <input type="text" id="username" placeholder="admin یاخود ناوی خوێندکار" class="w-full bg-[#1f2937] text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-blue-500 text-sm" required>
                 </div>
                 <div>
-                    <label class="block text-slate-300 text-sm font-medium mb-1">Password</label>
-                    <input type="password" id="password" placeholder="Enter password" class="w-full bg-slate-700 text-white px-4 py-2.5 rounded-lg border border-slate-600 focus:outline-none focus:border-blue-500 text-sm" required>
+                    <label class="block text-slate-300 text-xs font-medium mb-1">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" class="w-full bg-[#1f2937] text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-blue-500 text-sm" required>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition duration-200 text-sm">
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition duration-200 text-sm shadow-lg shadow-blue-600/20">
                     Log In
                 </button>
             </form>
@@ -37,115 +37,138 @@
     </div>
 
     <!-- Main App Dashboard -->
-    <div id="appSection" class="hidden min-h-screen flex flex-col md:flex-row">
+    <div id="appSection" class="hidden min-h-screen flex">
+        
         <!-- Sidebar -->
-        <aside class="w-full md:w-64 bg-[#111827] border-b md:border-b-0 md:border-r border-slate-800 flex flex-row md:flex-col justify-between p-4 shrink-0">
-            <div class="flex md:flex-col items-center md:items-stretch justify-between w-full">
-                <!-- College Logo & Name -->
-                <div class="flex items-center gap-3 px-2 py-1 md:py-3 md:mb-6 md:border-b border-slate-800">
-                    <div class="w-9 h-9 md:w-10 md:h-10 bg-blue-600 rounded-lg flex items-center justify-center overflow-hidden font-bold text-sm shrink-0">
-                        <img src="logo.png" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://via.placeholder.com/40?text=UOK';">
+        <aside class="w-64 bg-[#111827] border-r border-slate-800 flex flex-col justify-between p-4 shrink-0 select-none">
+            <div>
+                <!-- College Brand -->
+                <div class="flex items-center gap-3 px-2 py-3 mb-8 border-b border-slate-800/80">
+                    <div class="w-10 h-10 bg-gradient-to-tr from-amber-500 to-amber-200 rounded-xl flex items-center justify-center font-bold text-slate-950 shrink-0 shadow-lg">
+                        UOK
                     </div>
-                    <div class="hidden sm:block">
-                        <h1 class="font-bold text-xs leading-tight">University of Kirkuk</h1>
-                        <p class="text-[10px] text-slate-400">CSIT Library</p>
+                    <div>
+                        <h1 class="font-bold text-xs leading-tight text-white">Kirkuk University</h1>
+                        <p class="text-[10px] text-amber-400 font-semibold">CSIT Library System</p>
                     </div>
                 </div>
 
-                <nav class="flex md:space-y-1 gap-1 md:gap-0">
-                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex items-center gap-2 md:gap-3 px-3 py-2 rounded-lg text-xs md:text-sm font-medium bg-blue-600 text-white">
-                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i> <span class="hidden sm:inline">Dashboard</span>
-                    </button>
-                    <button onclick="switchTab('books')" id="nav-books" class="flex items-center gap-2 md:gap-3 px-3 py-2 rounded-lg text-xs md:text-sm font-medium text-slate-400 hover:bg-slate-800">
-                        <i data-lucide="book-open" class="w-4 h-4"></i> <span class="hidden sm:inline">Manage Books</span>
-                    </button>
-                    <button onclick="switchTab('settings')" id="nav-settings" class="flex items-center gap-2 md:gap-3 px-3 py-2 rounded-lg text-xs md:text-sm font-medium text-slate-400 hover:bg-slate-800">
-                        <i data-lucide="settings" class="w-4 h-4"></i> <span class="hidden sm:inline">Settings</span>
-                    </button>
-                </nav>
+                <!-- Dynamic Navigation Links -->
+                <nav id="sidebarNav" class="space-y-1.5"></nav>
             </div>
 
-            <button onclick="handleLogout()" class="hidden md:flex items-center justify-center gap-2 bg-red-900/40 hover:bg-red-800 text-red-300 py-2.5 rounded-lg transition duration-200 text-sm font-medium">
+            <!-- Logout Button -->
+            <button onclick="handleLogout()" class="flex items-center justify-center gap-2 bg-red-950/40 hover:bg-red-900/60 border border-red-900/50 text-red-300 py-2.5 rounded-xl transition duration-200 text-sm font-medium">
                 <i data-lucide="log-out" class="w-4 h-4"></i> Logout
             </button>
         </aside>
 
         <!-- Main Content Area -->
-        <main class="flex-1 flex flex-col min-w-0">
+        <div class="flex-1 flex flex-col min-w-0 bg-[#0b0f19]">
+            
             <!-- Header -->
-            <header class="h-16 border-b border-slate-800 flex items-center justify-between px-4 sm:px-6 bg-[#111827]">
-                <div class="flex items-center gap-4">
-                    <button onclick="switchTab('dashboard')" class="text-xs sm:text-sm font-semibold hover:text-blue-400 transition">Home</button>
-                    <button onclick="switchTab('settings')" class="text-xs sm:text-sm font-semibold hover:text-blue-400 transition">Settings</button>
-                </div>
+            <header class="h-16 border-b border-slate-800/80 flex items-center justify-between px-6 bg-[#111827]/60 backdrop-blur-md sticky top-0 z-20">
                 <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700">
-                        <img id="headerProfilePic" src="" class="w-6 h-6 rounded-full bg-blue-500 object-cover hidden" alt="Profile">
-                        <span id="headerUserName" class="text-xs font-medium">CSIT Admin</span>
+                    <span id="breadcrumbText" class="text-xs sm:text-sm text-slate-300 font-medium">Library System >> HOME</span>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2 bg-[#1f2937] px-3 py-1.5 rounded-full border border-slate-700">
+                        <img id="headerProfilePic" src="" class="w-6 h-6 rounded-full bg-blue-600 object-cover hidden" alt="Profile">
+                        <div id="headerProfileFallback" class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white">A</div>
+                        <span id="headerUserName" class="text-xs font-medium text-slate-200">Admin</span>
                     </div>
-                    <button onclick="handleLogout()" class="md:hidden bg-red-900/40 text-red-300 p-2 rounded-lg hover:bg-red-800" title="Logout">
-                        <i data-lucide="log-out" class="w-4 h-4"></i>
-                    </button>
                 </div>
             </header>
 
-            <div class="p-4 sm:p-6 flex-1 overflow-y-auto space-y-6">
+            <!-- Main Views Container -->
+            <main class="p-6 flex-1 overflow-y-auto space-y-6">
                 
-                <!-- 1. Dashboard Tab -->
-                <div id="tab-dashboard" class="space-y-6">
-                    <div class="bg-slate-800/60 p-5 sm:p-6 rounded-2xl border border-slate-700/50">
-                        <h3 class="text-xl sm:text-2xl font-bold mb-2">Welcome to <span class="text-blue-400">CSIT Library System</span></h3>
-                        <p class="text-slate-400 text-xs sm:text-sm">Explore available books and lecture notes below.</p>
+                <!-- Home View -->
+                <div id="tab-home" class="space-y-6">
+                    <div class="text-center py-6 space-y-2">
+                        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Welcome to <span class="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Library Management System</span></h2>
+                        <p class="text-slate-400 text-xs sm:text-sm max-w-xl mx-auto">Simplify your library operations with an intuitive dashboard to manage books and explore resources.</p>
                     </div>
 
-                    <h4 class="text-lg sm:text-xl font-bold text-white">Available Books & Lecture Notes</h4>
-                    <div id="availableBooksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"></div>
+                    <div id="booksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
                 </div>
 
-                <!-- 2. Manage Books Tab -->
-                <div id="tab-books" class="hidden space-y-6">
-                    <h3 class="text-xl font-bold">Upload Books or Lecture Notes</h3>
-                    
-                    <form id="bookForm" onsubmit="addBook(event)" class="bg-slate-800 p-5 sm:p-6 rounded-2xl border border-slate-700 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" id="bookTitle" placeholder="Title (Book/Note Name)" class="bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white" required>
-                        <input type="text" id="bookAuthor" placeholder="Author / Teacher Name" class="bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white" required>
-                        <input type="text" id="bookCategory" placeholder="Category (e.g. CS, Lecture Notes)" class="bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white md:col-span-2" required>
-                        
-                        <div class="md:col-span-2 flex flex-col sm:flex-row gap-4">
-                            <div class="flex-1">
-                                <label class="block text-xs text-slate-400 mb-1">Book / File (PDF, etc.)</label>
-                                <input type="file" id="bookFile" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700">
+                <!-- Upload View (Admin) -->
+                <div id="tab-upload" class="hidden space-y-6 max-w-2xl mx-auto">
+                    <h3 class="text-xl font-bold text-white">Upload Book / PDF Note</h3>
+                    <form id="bookForm" class="bg-[#111827] p-6 rounded-2xl border border-slate-800 space-y-4">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Book Title</label>
+                            <input type="text" id="bookTitle" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Author / Teacher Name</label>
+                            <input type="text" id="bookAuthor" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Category / Section</label>
+                            <input type="text" id="bookCategory" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500" required>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">Book File (PDF)</label>
+                                <input type="file" id="bookFile" accept=".pdf" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white">
                             </div>
-                            <div class="flex-1">
+                            <div>
                                 <label class="block text-xs text-slate-400 mb-1">Cover Image</label>
-                                <input type="file" id="coverImage" accept="image/*" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-700 file:text-white hover:file:bg-slate-600">
+                                <input type="file" id="coverImage" accept="image/*" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-700 file:text-white">
                             </div>
                         </div>
-
-                        <button type="submit" class="md:col-span-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition text-sm">Upload Book / Note</button>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/20">Upload Book</button>
                     </form>
                 </div>
 
-                <!-- 3. Settings Tab -->
-                <div id="tab-settings" class="hidden space-y-6">
-                    <h3 class="text-xl font-bold">Settings & Profile</h3>
-                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 max-w-md space-y-4">
+                <!-- Manage Books View (Admin) -->
+                <div id="tab-manage-books" class="hidden space-y-6">
+                    <h3 class="text-xl font-bold text-white">Manage Books (Edit / Delete)</h3>
+                    <div id="manageBooksList" class="space-y-3"></div>
+                </div>
+
+                <!-- Users View (Admin) -->
+                <div id="tab-users" class="hidden space-y-6">
+                    <h3 class="text-xl font-bold text-white">User Management</h3>
+                    <form id="userForm" class="bg-[#111827] p-4 rounded-2xl border border-slate-800 flex gap-3">
+                        <input type="text" id="newUsername" placeholder="Username" class="flex-1 bg-[#1f2937] border border-slate-700 p-2 rounded-xl text-sm text-white" required>
+                        <input type="password" id="newPassword" placeholder="Password" class="flex-1 bg-[#1f2937] border border-slate-700 p-2 rounded-xl text-sm text-white" required>
+                        <select id="newRole" class="bg-[#1f2937] border border-slate-700 p-2 rounded-xl text-sm text-white">
+                            <option value="student">Student</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-semibold">Create User</button>
+                    </form>
+                    <div id="usersList" class="space-y-2"></div>
+                </div>
+
+                <!-- Favorite View (Student) -->
+                <div id="tab-favorite" class="hidden space-y-6">
+                    <h3 class="text-xl font-bold text-white">Favorite Books</h3>
+                    <div id="favoriteBooksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+                </div>
+
+                <!-- Settings View -->
+                <div id="tab-setting" class="hidden space-y-6">
+                    <h3 class="text-xl font-bold text-white">Settings & Profile</h3>
+                    <div class="bg-[#111827] p-6 rounded-2xl border border-slate-800 max-w-md space-y-4">
                         <p class="text-sm text-slate-300">Update Profile Picture</p>
-                        <form onsubmit="updateProfilePic(event)" class="space-y-3">
-                            <input type="file" id="profilePicInput" accept="image/*" class="w-full text-xs text-slate-400" required>
-                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 py-2 rounded-lg font-semibold">Update Picture</button>
+                        <form id="profileForm" class="space-y-3">
+                            <input type="file" id="profilePicFile" accept="image/*" class="w-full text-xs text-slate-400" required>
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 py-2 rounded-xl font-semibold">Update Picture</button>
                         </form>
                     </div>
                 </div>
 
-            </div>
-        </main>
-    </div>
-
-    <!-- Link JavaScript File -->
-    <script src="app.js"></script>
-    <script>
-        lucide.createIcons();
-    </script>
-</body>
-</html>
+                <!-- Book Details & Parts View (بەشەکانی کتێب بێ نوسینی ئەڵقە) -->
+                <div id="tab-book-detail" class="hidden space-y-6">
+                    <button onclick="switchTab('home')" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-4 py-2 rounded-xl font-medium transition flex items-center gap-2">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Home
+                    </button>
+                    <div class="flex flex-col items-center justify-center space-y-4 py-4">
+                        <div id="detailBookCover" class="w-48 h-64 bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-700 flex items-center justify-center"></div>
+                        <h2 id="detailBookTitle" class="text-xl font-bold text-white text-center"></h2>
+                        <p id="detailBook
