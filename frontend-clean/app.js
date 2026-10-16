@@ -7,7 +7,7 @@ const translations = {
     ku: {
         home: "سەرەکی",
         favorite: "دڵخوازەکان",
-        borrowed: "قەرزکراوەکان",
+        borrowed: "کتێبە قەرزکراوەکان",
         upload: "ئەپلۆدکردن",
         manage: "بەڕێوەبردنی کتێب",
         users: "بەکارهێنەران",
@@ -19,6 +19,7 @@ const translations = {
         bookTitleLbl: "ناوی کتێب / مەلزەمە",
         authorLbl: "مامۆستا / دانەر",
         typeLbl: "جۆر (کتێب قەرزکردن / مەلزەمە بێ کات)",
+        borrowLimitLbl: "ماوەی قەرزکردن (بە ڕۆژ)",
         partNameLbl: "ناوی بەش (نموونە: Part 1)",
         catLbl: "قۆناغ / بەش",
         pdfLbl: "فایلی PDF",
@@ -27,16 +28,19 @@ const translations = {
         manageTitle: "بەڕێوەبردنی کتێبەکان",
         userMgmtTitle: "بەڕێوەبردنی بەکارهێنەران",
         favTitle: "کتێبە دڵخوازەکان",
-        borrowedTitle: "کتێبە قەرزکراوەکانی من (ماوەبەسەرچوون)",
+        borrowedTitle: "کتێبە قەرزکراوەکانی من",
         settingsTitle: "ڕێکخستنەکان و پڕۆفایل",
         updatePic: "گۆڕینی وێنەی پڕۆفایل",
         updateBtn: "نوێکردنەوەی وێنە",
         backHome: "گەڕانەوە بۆ سەرەکی",
         partsList: "بەشە بەردەستەکانی ئەم کتێبە",
-        borrowBtn: "قەرزکردنی کتێب (بۆ ٧ ڕۆژ)",
+        borrowBtn: "قەرزکردنی کتێب",
         borrowedActive: "قەرزکراوە (ماوەی ماوە: ",
         expired: "ماوەی قەرزکردن تەواو بووە - قفڵکراوە!",
-        freeMalzam: "مەلزەمەی بێ کات (خۆڕایی)"
+        freeMalzam: "مەلزەمەی بێ کات (خۆڕایی)",
+        username: "ناوی بەکارهێنەر",
+        password: "وشەی تێپەڕ",
+        loginBtn: "چوونەژوورەوە"
     },
     ar: {
         home: "الرئيسية",
@@ -53,6 +57,7 @@ const translations = {
         bookTitleLbl: "اسم الكتاب / الملزمة",
         authorLbl: "الأستاذ / المؤلف",
         typeLbl: "النوع (كتاب للاستعارة / ملزمة مجانية)",
+        borrowLimitLbl: "مدة الاستعارة (بالأيام)",
         partNameLbl: "اسم الجزء (مثال: Part 1)",
         catLbl: "المرحلة / القسم",
         pdfLbl: "ملف PDF",
@@ -67,10 +72,13 @@ const translations = {
         updateBtn: "تحديث الصورة",
         backHome: "العودة للرئيسية",
         partsList: "الأجزاء المتاحة لهذا الكتاب",
-        borrowBtn: "استعارة الكتاب (لمدة 7 أيام)",
+        borrowBtn: "استعارة الكتاب",
         borrowedActive: "مستعار (المتبقي: ",
         expired: "انتهت فترة الاستعارة - مقفل!",
-        freeMalzam: "ملزمة بدون وقت (مجانية)"
+        freeMalzam: "ملزمة بدون وقت (مجانية)",
+        username: "اسم المستخدم",
+        password: "كلمة المرور",
+        loginBtn: "تسجيل الدخول"
     },
     en: {
         home: "Home",
@@ -87,6 +95,7 @@ const translations = {
         bookTitleLbl: "Book / Note Title",
         authorLbl: "Author / Teacher",
         typeLbl: "Type (Book with Borrowing / Free Note)",
+        borrowLimitLbl: "Borrow Limit (Days)",
         partNameLbl: "Part Name (e.g. Part 1)",
         catLbl: "Category / Stage",
         pdfLbl: "PDF File",
@@ -101,10 +110,13 @@ const translations = {
         updateBtn: "Update Picture",
         backHome: "Back to Home",
         partsList: "Available Parts",
-        borrowBtn: "Borrow Book (7 Days)",
+        borrowBtn: "Borrow Book",
         borrowedActive: "Borrowed (Remaining: ",
         expired: "Borrowing period expired - Locked!",
-        freeMalzam: "Free Note (No Expiry)"
+        freeMalzam: "Free Note (No Expiry)",
+        username: "Username",
+        password: "Password",
+        loginBtn: "Log In"
     }
 };
 
@@ -153,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         fetchManageBooks();
                     }
                 } else {
-                    alert(data.message || "ناوی بەکارهێنەر یان وشەی تێپەڕ هەڵەیە");
+                    alert("ناوی بەکارهێنەر یان وشەی تێپەڕ هەڵەیە");
                 }
             } catch (err) {
                 console.error(err);
@@ -169,7 +181,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const formData = new FormData();
             formData.append('title', document.getElementById('bookTitle').value.trim());
             formData.append('author', document.getElementById('bookAuthor').value.trim());
-            formData.append('resourceType', document.getElementById('resourceType').value || 'book');
+            const resourceType = document.getElementById('resourceType').value || 'book';
+            formData.append('resourceType', resourceType);
+            formData.append('borrowDays', document.getElementById('borrowDays')?.value || '7');
             formData.append('partName', document.getElementById('bookPartName').value.trim() || 'General');
             formData.append('category', document.getElementById('bookCategory').value.trim());
             
@@ -212,13 +226,21 @@ document.addEventListener("DOMContentLoaded", () => {
                     alert('بەکارهێنەر دروستکرا!');
                     userForm.reset();
                     fetchUsers();
-                } else {
-                    alert('نەتوانرا بەکارهێنەر دروست بکرێت');
                 }
             } catch (err) { console.error(err); }
         });
     }
 });
+
+function toggleBorrowLimitField() {
+    const type = document.getElementById('resourceType').value;
+    const daysContainer = document.getElementById('borrowDaysContainer');
+    if (type === 'malzam') {
+        daysContainer.style.display = 'none';
+    } else {
+        daysContainer.style.display = 'grid';
+    }
+}
 
 function changeLanguage(lang) {
     currentLang = lang;
@@ -247,11 +269,20 @@ function setLanguage(lang) {
 }
 
 function toggleTheme() {
-    const root = document.documentElement;
-    root.classList.toggle('dark');
+    const html = document.documentElement;
+    html.classList.toggle('dark');
+    const isDark = html.classList.contains('dark');
+    
+    // گۆڕینی ڕەنگی پاشبنەما
+    if (isDark) {
+        document.body.className = "bg-[#0b0f19] text-slate-100 min-h-screen font-sans overflow-x-hidden transition-colors duration-300";
+    } else {
+        document.body.className = "bg-slate-100 text-slate-900 min-h-screen font-sans overflow-x-hidden transition-colors duration-300";
+    }
+
     const icon = document.getElementById('themeIcon');
     if (icon) {
-        if (root.classList.contains('dark')) {
+        if (isDark) {
             icon.setAttribute('data-lucide', 'sun');
         } else {
             icon.setAttribute('data-lucide', 'moon');
@@ -269,6 +300,9 @@ function buildSidebar() {
         nav.innerHTML = `
             <button onclick="switchTab('home')" id="nav-home" class="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-medium bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-600/30 transition">
                 <i data-lucide="home" class="w-4 h-4"></i> ${t.home}
+            </button>
+            <button onclick="switchTab('borrowed')" id="nav-borrowed" class="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-medium text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
+                <i data-lucide="clock" class="w-4 h-4"></i> ${t.borrowed}
             </button>
             <button onclick="switchTab('upload')" id="nav-upload" class="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-medium text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
                 <i data-lucide="cloud-upload" class="w-4 h-4"></i> ${t.upload}
@@ -426,6 +460,7 @@ function openBookDetails(bookTitle) {
     let borrowedList = JSON.parse(localStorage.getItem('borrowedBooks')) || [];
     const bookId = sampleBook._id || sampleBook.id;
     const existingBorrow = borrowedList.find(item => item.bookId === bookId);
+    const borrowLimitDays = parseInt(sampleBook.borrowDays) || 7;
 
     if (isMalzam) {
         matchedBooks.forEach((part, index) => {
@@ -442,9 +477,9 @@ function openBookDetails(bookTitle) {
         if (!existingBorrow) {
             partsGrid.innerHTML = `
                 <div class="col-span-full bg-[#111827] border border-slate-800 p-6 rounded-3xl text-center space-y-4">
-                    <p class="text-sm text-slate-300">ئەم کتێبە پێویستی بە قەرزکردن هەیە (ماوەکەی ٧ ڕۆژە).</p>
-                    <button onclick="borrowBook('${bookId}', '${sampleBook.title.replace(/'/g, "\\'")}')" class="bg-purple-600 hover:bg-purple-700 text-white text-xs px-6 py-3 rounded-xl font-bold transition shadow-lg shadow-purple-600/30">
-                        ${t.borrowBtn}
+                    <p class="text-sm text-slate-300">ئەم کتێبە پێویستی بە قەرزکردن هەیە (ماوەی قەرزکردن: ${borrowLimitDays} ڕۆژ).</p>
+                    <button onclick="borrowBook('${bookId}', '${sampleBook.title.replace(/'/g, "\\'")}', ${borrowLimitDays})" class="bg-purple-600 hover:bg-purple-700 text-white text-xs px-6 py-3 rounded-xl font-bold transition shadow-lg shadow-purple-600/30">
+                        ${t.borrowBtn} (${borrowLimitDays} ڕۆژ)
                     </button>
                 </div>
             `;
@@ -479,12 +514,12 @@ function openBookDetails(bookTitle) {
     lucide.createIcons();
 }
 
-function borrowBook(bookId, title) {
+function borrowBook(bookId, title, days) {
     let borrowedList = JSON.parse(localStorage.getItem('borrowedBooks')) || [];
-    const expiryTime = new Date().getTime() + (7 * 24 * 60 * 60 * 1000);
+    const expiryTime = new Date().getTime() + (days * 24 * 60 * 60 * 1000);
     borrowedList.push({ bookId, title, expiryTime });
     localStorage.setItem('borrowedBooks', JSON.stringify(borrowedList));
-    alert('کتێبەکە بە سەرکەوتوویی قەرزکرا بۆ ماوەی ٧ ڕۆژ!');
+    alert(`کتێبەکە بە سەرکەوتوویی قەرزکرا بۆ ماوەی ${days} ڕۆژ!`);
     openBookDetails(title);
 }
 
@@ -557,11 +592,14 @@ function fetchBorrowedBooks() {
         const remainingDays = Math.max(0, Math.ceil((item.expiryTime - now) / (1000 * 60 * 60 * 24)));
 
         grid.innerHTML += `
-            <div class="bg-[#161f33] rounded-3xl border border-slate-800 p-4 space-y-3 shadow-xl">
+            <div class="bg-[#161f33] rounded-3xl border border-slate-800 p-5 space-y-3 shadow-xl">
                 <h4 class="font-bold text-white text-base">${item.title}</h4>
                 <p class="text-xs ${isExpired ? 'text-red-400 font-bold' : 'text-amber-400'}">
                     ${isExpired ? 'ماوەکەی تەواو بووە و قفڵە' : `ماوەی ماوە: ${remainingDays} ڕۆژ`}
                 </p>
+                <button onclick="openBookDetails('${item.title.replace(/'/g, "\\'")}')" class="w-full bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 text-xs py-2 rounded-xl transition">
+                    بینینی کتێبەکە
+                </button>
             </div>
         `;
     });

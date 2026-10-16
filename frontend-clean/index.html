@@ -26,7 +26,7 @@
             <form id="loginForm" class="space-y-4">
                 <div>
                     <label class="block text-slate-300 text-xs font-medium mb-1" data-i18n="username">ناوی بەکارهێنەر</label>
-                    <input type="text" id="username" placeholder="admin یاخود ناوی خوێندکار" class="w-full bg-[#1f2937] text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-purple-500 text-sm" required>
+                    <input type="text" id="username" placeholder="admin" class="w-full bg-[#1f2937] text-white px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-purple-500 text-sm" required>
                 </div>
                 <div>
                     <label class="block text-slate-300 text-xs font-medium mb-1" data-i18n="password">وشەی تێپەڕ</label>
@@ -86,7 +86,7 @@
                         <option value="en">English</option>
                     </select>
 
-                    <button onclick="toggleTheme()" class="bg-[#1f2937] text-amber-400 p-2 rounded-xl border border-slate-700 hover:bg-slate-800 transition">
+                    <button onclick="toggleTheme()" class="bg-[#1f2937] text-amber-400 p-2 rounded-xl border border-slate-700 hover:bg-slate-800 transition flex items-center justify-center">
                         <i data-lucide="sun" id="themeIcon" class="w-4 h-4"></i>
                     </button>
 
@@ -125,22 +125,30 @@
                             </div>
                             <div>
                                 <label class="block text-xs text-slate-400 mb-1" data-i18n="typeLbl">جۆر (کتێب قەرزکردن / مەلزەمە بێ کات)</label>
-                                <select id="resourceType" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500">
+                                <select id="resourceType" onchange="toggleBorrowLimitField()" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500">
                                     <option value="book">کتێب (قەرزکردنی کاتی)</option>
                                     <option value="malzam">مەلزەمە (بێ کات - فري)</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                        <!-- Borrow Duration Limit Field (Admin) -->
+                        <div id="borrowDaysContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1" data-i18n="borrowLimitLbl">ماوەی قەرزکردن (بە ڕۆژ)</label>
+                                <input type="number" id="borrowDays" value="7" min="1" max="365" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500" required>
+                            </div>
                             <div>
                                 <label class="block text-xs text-slate-400 mb-1" data-i18n="partNameLbl">ناوی بەش (نموونە: Part 1)</label>
                                 <input type="text" id="bookPartName" placeholder="Part 1" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500">
                             </div>
-                            <div>
-                                <label class="block text-xs text-slate-400 mb-1" data-i18n="catLbl">قۆناغ / بەش</label>
-                                <input type="text" id="bookCategory" placeholder="Stage 4" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500" required>
-                            </div>
                         </div>
+
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1" data-i18n="catLbl">قۆناغ / بەش</label>
+                            <input type="text" id="bookCategory" placeholder="Stage 4" class="w-full bg-[#1f2937] border border-slate-700 p-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500" required>
+                        </div>
+
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs text-slate-400 mb-1" data-i18n="pdfLbl">فایلی PDF</label>
@@ -182,9 +190,9 @@
                     <div id="favoriteBooksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"></div>
                 </div>
 
-                <!-- Borrowed Books View (پێویست بۆ بەشی کتێبە قەرزکراوەکان) -->
+                <!-- Borrowed Books View -->
                 <div id="tab-borrowed" class="hidden space-y-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-white" data-i18n="borrowedTitle">کتێبە قەرزکراوەکانی من (ماوەبەسەرچوون)</h3>
+                    <h3 class="text-lg sm:text-xl font-bold text-white" data-i18n="borrowedTitle">کتێبە قەرزکراوەکانی من</h3>
                     <div id="borrowedBooksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"></div>
                 </div>
 
